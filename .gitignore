@@ -1,0 +1,14 @@
+**/.terraform/*
+**/.terraform.d/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+.kube/*
+
+config.env
+*.zip
+__pycache__
+
+.DS_Store
