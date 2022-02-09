@@ -3,20 +3,11 @@
 import sys
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-import json
-import logging
 from datetime import datetime, timedelta
-from libs import ec2, kinesis, role, dynamodb
 
-logger = logging.getLogger(__name__)
+from libs import dynamodb
+
 dag_prefix_name="scrapper_"
-
-class DatetimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        try:
-            return super().default(obj)
-        except TypeError:
-            return str(obj)
 
 def create_dag(dag_id,
                schedule,
@@ -27,6 +18,21 @@ def create_dag(dag_id,
     Retrieves EC2 instance data assuming a role and pushes the records to Kinesis.
     """
     def push_data(*args):
+
+        import json
+        import logging
+        from libs import ec2, kinesis, role
+
+        logger = logging.getLogger(__name__)
+
+        class DatetimeEncoder(json.JSONEncoder):
+
+            def default(self, obj):
+                try:
+                    return super().default(obj)
+                except TypeError:
+                    return str(obj)
+
         try:
             assumerole = role.AssumeRole(role_arn='arn:aws:iam::'+dag_name+':role/realtime-costs-client')
             session = assumerole.assumed_role_session()

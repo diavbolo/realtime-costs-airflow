@@ -4,11 +4,7 @@ from airflow.operators.python_operator import PythonOperator
 from airflow import settings
 from datetime import datetime, timedelta
 import os
-import os.path
 import logging
-from libs import dynamodb
-
-logger = logging.getLogger(__name__)
 
 dag_prefix_name ="scrapper_"
 
@@ -24,6 +20,10 @@ default_args = {'owner': 'airflow',
 Delete DAGs for unsubscribed AWS accounts
 """
 def cleanup_scrapper(*args):
+
+    from libs import dynamodb
+
+    logger = logging.getLogger(__name__)
 
     session = settings.Session()
     
