@@ -8,7 +8,7 @@ phases:
       - echo "pre_build step"
   build:
     commands:
-      - aws s3 sync . s3://realtime-costs-airflow/ --delete
+      - aws s3 sync . s3://realtime-costs-airflow/
   post_build:
     commands:
       - echo "post_build step"
